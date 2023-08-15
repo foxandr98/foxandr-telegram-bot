@@ -34,3 +34,6 @@ build/
 
 ### Properties with credentials ###
 application.properties
+
+### Logs ###
+/logs
