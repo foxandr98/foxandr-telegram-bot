@@ -1,4 +1,4 @@
-package com.foxandr.bot;
+package com.foxandr.telegrambot;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
