@@ -6,12 +6,16 @@ import com.foxandr.telegrambot.exceptions.InvalidArgsCountException;
 import com.foxandr.telegrambot.util.MessageUtils;
 import com.foxandr.telegrambot.util.ChatUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @Component
 @Slf4j
@@ -22,6 +26,7 @@ public class UpdateController {
     public void registerBot(TelegramBot telegramBot) {
         this.telegramBot = telegramBot;
         this.commandContainer = new CommandContainer(telegramBot);
+
     }
 
     public void processUpdate(Update update) {

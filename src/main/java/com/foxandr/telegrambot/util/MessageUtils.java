@@ -11,6 +11,7 @@ public class MessageUtils {
         log.info("Sending answer in [{}] to [@{}] -> {}",
                 ChatUtils.getGroupChatOrUserName(message.getChat()), message.getFrom().getUserName(), text);
         var sendMessage = new SendMessage();
+        sendMessage.enableHtml(true);
         sendMessage.setChatId(message.getChat().getId());
         sendMessage.setText(text);
         return sendMessage;

@@ -2,6 +2,8 @@ package com.foxandr.telegrambot.commands.base;
 
 import com.foxandr.telegrambot.bot.TelegramBot;
 import com.foxandr.telegrambot.commands.Command;
+import com.foxandr.telegrambot.commands.CommandContainer;
+import com.foxandr.telegrambot.util.MessageUtils;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -12,17 +14,17 @@ public class HelpCommand extends Command {
 
     @Override
     public String getName() {
-        return null;
+        return "/help";
     }
 
     @Override
     public String getDescription() {
-        return null;
+        return "Показать справку по командам";
     }
 
     @Override
     public String getUsage() {
-        return null;
+        return "/help";
     }
 
     @Override
@@ -32,6 +34,6 @@ public class HelpCommand extends Command {
 
     @Override
     public void execute(Message message, String[] args) throws TelegramApiException {
-
+        telegramBot.execute(MessageUtils.createSendMessageWithText(message, CommandContainer.HELP_STRING));
     }
 }

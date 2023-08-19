@@ -1,5 +1,6 @@
 package com.foxandr.telegrambot.bot;
 
+import com.foxandr.telegrambot.commands.CommandContainer;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     public TelegramBot(@Value("${bot.token}") String botToken, UpdateController updateController) {
         super(botToken);
         this.updateController = updateController;
+
     }
 
     @PostConstruct
