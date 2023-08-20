@@ -16,6 +16,10 @@ public class HelloCommand implements Command {
     public String getDescription() {
         return "Сказать привет";
     }
+    @Override
+    public String[] getUsage() {
+        return new String[] {"/hello"};
+    }
 
     @Override
     public String[] getAliases() {

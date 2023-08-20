@@ -36,6 +36,11 @@ public class ReasonToDrinkCommand implements Command {
     }
 
     @Override
+    public String[] getUsage() {
+        return new String[]{"/reason_to_drink"};
+    }
+
+    @Override
     public void execute(TelegramBot telegramBot, Message message, String[] args) throws TelegramApiException {
         fillCelebrationsAndCheckCacheIsActual(message);
         StringBuilder sendText = new StringBuilder("<b>Повод выпить!</b>");

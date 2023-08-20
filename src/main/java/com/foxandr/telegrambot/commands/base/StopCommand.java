@@ -11,10 +11,17 @@ public class StopCommand implements Command {
     public String getName() {
         return "/stop";
     }
+
     @Override
     public String getDescription() {
         return "Отключить все подписки и таймеры";
     }
+
+    @Override
+    public String[] getUsage() {
+        return new String[]{"/stop"};
+    }
+
     @Override
     public void execute(TelegramBot telegramBot, Message message, String[] args) throws TelegramApiException {
         telegramBot.execute(MessageUtils.createSendMessageWithText(message, "Все подписки и таймеры отключены!"));

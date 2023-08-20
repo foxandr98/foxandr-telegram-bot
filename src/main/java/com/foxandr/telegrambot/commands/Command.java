@@ -7,6 +7,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 public interface Command {
     String getName();
     String getDescription();
+    String[] getUsage();
     default String[] getAliases() {
         return new String[0];
     }
@@ -15,12 +16,6 @@ public interface Command {
     }
     default int getMaxArgs(){
         return 0;
-    }
-    default boolean isArgumentsPresent(){
-        return false;
-    }
-    default String getUsage(){
-        return "";
     }
 
     default boolean isListedInHelp(){

@@ -16,6 +16,10 @@ public class StartCommand implements Command {
     public String getDescription() {
         return "Активировать бота";
     }
+    @Override
+    public String[] getUsage() {
+        return new String[] {"/start"};
+    }
 
     @Override
     public void execute(TelegramBot telegramBot, Message message, String[] args) throws TelegramApiException {

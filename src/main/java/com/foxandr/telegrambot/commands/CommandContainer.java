@@ -21,9 +21,13 @@ import java.util.*;
 public class CommandContainer {
     private final TelegramBot telegramBot;
     private final static Map<String, Command> commandsByName;
+    private final static TreeSet<Command> setOfCommands;
 
     static {
         commandsByName = new HashMap<>();
+        setOfCommands = new TreeSet<>(
+                (c1, c2) -> Integer.compare(c1.getHelpOrderPriority(), c2.getHelpOrderPriority())
+        );
         Reflections reflections = new Reflections("com.foxandr.telegrambot.commands");
         Set<Class<? extends Command>> commandClasses = reflections.getSubTypesOf(Command.class);
         for (Class<? extends Command> commandClass : commandClasses) {
@@ -37,19 +41,20 @@ public class CommandContainer {
         }
     }
 
-    public static TreeSet<Command> getSetOfCommands() {
-        TreeSet<Command> sortedCommandSet = new TreeSet<>(
-                (c1, c2) -> Integer.compare(c1.getHelpOrderPriority(), c2.getHelpOrderPriority())
-        );
-        sortedCommandSet.addAll(commandsByName.values());
-        return sortedCommandSet;
-    }
-
     private static void addCommand(Command command) {
         commandsByName.put(command.getName(), command);
+        setOfCommands.add(command);
         for (String alias : command.getAliases()) {
             commandsByName.put(alias, command);
         }
+    }
+
+    public static TreeSet<Command> getSetOfCommands() {
+        return setOfCommands;
+    }
+
+    public static Map<String, Command> getCommandsByName(){
+        return commandsByName;
     }
 
     public CommandContainer(TelegramBot telegramBot) {
@@ -63,7 +68,7 @@ public class CommandContainer {
 
     private void initCommandMenu() {
         List<BotCommand> listOfCommands = new ArrayList<>();
-        getSetOfCommands().forEach(com -> listOfCommands.add(
+        setOfCommands.forEach(com -> listOfCommands.add(
                         new BotCommand(
                                 com.getName(),
                                 com.getDescription())

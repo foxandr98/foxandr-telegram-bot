@@ -69,6 +69,10 @@ public class UpdateController {
                         e.getMessage());
                 telegramBot.execute(MessageUtils.createSendMessageWithText(message, String.format("Неправильное " +
                         "число аргументов для команды %1$s. Воспользуйтесь <code>/help %1$s</code>", command)));
+            } catch (IllegalArgumentException e) {
+                log.info("Invalid args {}", nArgs);
+                telegramBot.execute(MessageUtils.createSendMessageWithText(message, String.format("Некорректные " +
+                        "аргументы для команды %1$s. Воспользуйтесь <code>/help %1$s</code>", command)));
             }
         } catch (TelegramApiException e) {
             log.error("Failed to send message in [{}] to [@{}]",
