@@ -2,6 +2,7 @@ package com.foxandr.telegrambot.commands;
 
 import com.foxandr.telegrambot.bot.TelegramBot;
 import com.foxandr.telegrambot.commands.base.StartCommand;
+import com.foxandr.telegrambot.enums.Emojis;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.reflections.Reflections;
@@ -66,7 +67,7 @@ public class CommandContainer {
         helpStringBuilder.append("<b>Доступные команды!</b>\n");
         for (Command command : getSetOfCommands()) {
             helpStringBuilder.append("--------------------------\n");
-            helpStringBuilder.append("Команда: <code>" + command.getName() + "</code>\n");
+            helpStringBuilder.append("Команда: <b>" + command.getName() + "</b>\n");
             helpStringBuilder.append("Описание: " + command.getDescription() + "\n");
 //            helpStringBuilder.append("Пример использования: " + command.getUsage() + "\n");
         }
