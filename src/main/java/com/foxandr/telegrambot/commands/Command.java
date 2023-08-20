@@ -4,28 +4,32 @@ import com.foxandr.telegrambot.bot.TelegramBot;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-public abstract class Command {
-    protected TelegramBot telegramBot;
-    public Command(TelegramBot telegramBot) {
-        this.telegramBot = telegramBot;
+public interface Command {
+    String getName();
+    String getDescription();
+    default String[] getAliases() {
+        return new String[0];
     }
-
-    public abstract String getName();
-    public abstract String getDescription();
-    public abstract String getUsage();
-    public abstract String[] getAliases();
-
-    public int getMinArgs(){
+    default int getMinArgs(){
         return 0;
     }
-
-    public int getMaxArgs(){
+    default int getMaxArgs(){
         return 0;
     }
+    default boolean isArgumentsPresent(){
+        return false;
+    }
+    default String getUsage(){
+        return "";
+    }
 
-    public boolean isListedInHelp(){
+    default boolean isListedInHelp(){
         return true;
     }
 
-    public abstract void execute(Message message, String[] args) throws TelegramApiException;
+    default int getHelpOrderPriority(){
+        return 10;
+    }
+
+    void execute(TelegramBot telegramBot, Message message, String[] args) throws TelegramApiException;
 }

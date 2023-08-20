@@ -6,11 +6,7 @@ import com.foxandr.telegrambot.util.MessageUtils;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-public class StartCommand extends Command {
-    public StartCommand(TelegramBot telegramBot) {
-        super(telegramBot);
-    }
-
+public class StartCommand implements Command {
     @Override
     public String getName() {
         return "/start";
@@ -18,23 +14,16 @@ public class StartCommand extends Command {
 
     @Override
     public String getDescription() {
-        return "Скажи привет!";
+        return "Активировать бота";
     }
 
     @Override
-    public String getUsage() {
-        return "/start";
+    public void execute(TelegramBot telegramBot, Message message, String[] args) throws TelegramApiException {
+        telegramBot.execute(MessageUtils.createSendMessageWithText(message, "Бот активирован!"));
     }
 
     @Override
-    public String[] getAliases() {
-        return new String[] { "/hi" };
-    }
-
-    @Override
-    public void execute(Message message, String[] args) throws TelegramApiException {
-        telegramBot.execute(MessageUtils.createSendMessageWithText(message,
-                "Привет, " + message.getFrom().getFirstName()));
-
+    public int getHelpOrderPriority() {
+        return 0;
     }
 }

@@ -57,7 +57,7 @@ public class UpdateController {
             try {
                 parsedCommand = commandContainer.retrieveCommand(command);
                 isArgsLegit(parsedCommand, nArgs);
-                parsedCommand.execute(message, nArgs);
+                parsedCommand.execute(telegramBot, message, nArgs);
             } catch (NullPointerException e) {
                 log.info("Unsupported command {} in [{}] from [@{}]",
                         command, ChatUtils.getGroupChatOrUserName(message.getChat()), message.getFrom().getUserName());

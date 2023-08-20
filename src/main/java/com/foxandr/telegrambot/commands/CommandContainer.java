@@ -27,16 +27,16 @@ public class CommandContainer {
         Reflections reflections = new Reflections("com.foxandr.telegrambot.commands");
         Set<Class<? extends Command>> commandClasses = reflections.getSubTypesOf(Command.class);
         for (Class<? extends Command> commandClass : commandClasses) {
-            log.info("COMMAND [{}] added to command container!", commandClass.getName());
             try {
-                Command command = commandClass.getConstructor(TelegramBot.class).newInstance(telegramBot);
+                Command command = commandClass.getConstructor().newInstance();
                 addCommand(command);
+                log.info("COMMAND [{}] added to command container!", commandClass.getName());
             } catch (Exception e) {
                 log.error("Error while adding {} command to command container", commandClass.getName(), e);
             }
         }
         initHelpString();
-        initCommandKeyboard();
+        initCommandMenu();
     }
 
 
@@ -51,8 +51,12 @@ public class CommandContainer {
         return commandsByName.get(commandName);
     }
 
-    public Set<Command> getSetOfCommands() {
-        return new HashSet<>(commandsByName.values());
+    public TreeSet<Command> getSetOfCommands() {
+        TreeSet<Command> sortedCommandSet = new TreeSet<>(
+                (c1, c2) -> Integer.compare(c1.getHelpOrderPriority(), c2.getHelpOrderPriority())
+        );
+        sortedCommandSet.addAll(commandsByName.values());
+        return sortedCommandSet;
     }
 
     //TODO Продумать, нужно ли реализовывать команды с аргументами внутри одного сообщения, или же отдельным сообщением
@@ -62,7 +66,7 @@ public class CommandContainer {
         helpStringBuilder.append("<b>Доступные команды!</b>\n");
         for (Command command : getSetOfCommands()) {
             helpStringBuilder.append("--------------------------\n");
-            helpStringBuilder.append("Команда: <b>" + command.getName() + "</b>\n");
+            helpStringBuilder.append("Команда: <code>" + command.getName() + "</code>\n");
             helpStringBuilder.append("Описание: " + command.getDescription() + "\n");
 //            helpStringBuilder.append("Пример использования: " + command.getUsage() + "\n");
         }
@@ -70,7 +74,7 @@ public class CommandContainer {
         log.info("Help string created->\n {}", HELP_STRING);
     }
 
-    private void initCommandKeyboard() {
+    private void initCommandMenu() {
         List<BotCommand> listOfCommands = new ArrayList<>();
         getSetOfCommands().forEach(com -> listOfCommands.add(
                         new BotCommand(
