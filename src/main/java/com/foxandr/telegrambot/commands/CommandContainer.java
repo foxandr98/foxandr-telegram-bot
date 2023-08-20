@@ -1,6 +1,7 @@
 package com.foxandr.telegrambot.commands;
 
 import com.foxandr.telegrambot.bot.TelegramBot;
+import com.foxandr.telegrambot.commands.base.HelpCommand;
 import com.foxandr.telegrambot.commands.base.StartCommand;
 import com.foxandr.telegrambot.enums.Emojis;
 import jakarta.annotation.PostConstruct;
@@ -18,12 +19,10 @@ import java.util.*;
 
 @Slf4j
 public class CommandContainer {
-    public static String HELP_STRING;
-    private final Map<String, Command> commandsByName;
     private final TelegramBot telegramBot;
+    private final static Map<String, Command> commandsByName;
 
-    public CommandContainer(TelegramBot telegramBot) {
-        this.telegramBot = telegramBot;
+    static {
         commandsByName = new HashMap<>();
         Reflections reflections = new Reflections("com.foxandr.telegrambot.commands");
         Set<Class<? extends Command>> commandClasses = reflections.getSubTypesOf(Command.class);
@@ -36,23 +35,9 @@ public class CommandContainer {
                 log.error("Error while adding {} command to command container", commandClass.getName(), e);
             }
         }
-        initHelpString();
-        initCommandMenu();
     }
 
-
-    private void addCommand(Command command) {
-        commandsByName.put(command.getName(), command);
-        for (String alias : command.getAliases()) {
-            commandsByName.put(alias, command);
-        }
-    }
-
-    public Command retrieveCommand(String commandName) {
-        return commandsByName.get(commandName);
-    }
-
-    public TreeSet<Command> getSetOfCommands() {
+    public static TreeSet<Command> getSetOfCommands() {
         TreeSet<Command> sortedCommandSet = new TreeSet<>(
                 (c1, c2) -> Integer.compare(c1.getHelpOrderPriority(), c2.getHelpOrderPriority())
         );
@@ -60,19 +45,20 @@ public class CommandContainer {
         return sortedCommandSet;
     }
 
-    //TODO Продумать, нужно ли реализовывать команды с аргументами внутри одного сообщения, или же отдельным сообщением
-    public void initHelpString() {
-        StringBuilder helpStringBuilder = new StringBuilder();
-        helpStringBuilder.append("<b>Лисобот v0.1</b>\n");
-        helpStringBuilder.append("<b>Доступные команды!</b>\n");
-        for (Command command : getSetOfCommands()) {
-            helpStringBuilder.append("--------------------------\n");
-            helpStringBuilder.append("Команда: <b>" + command.getName() + "</b>\n");
-            helpStringBuilder.append("Описание: " + command.getDescription() + "\n");
-//            helpStringBuilder.append("Пример использования: " + command.getUsage() + "\n");
+    private static void addCommand(Command command) {
+        commandsByName.put(command.getName(), command);
+        for (String alias : command.getAliases()) {
+            commandsByName.put(alias, command);
         }
-        HELP_STRING = helpStringBuilder.toString();
-        log.info("Help string created->\n {}", HELP_STRING);
+    }
+
+    public CommandContainer(TelegramBot telegramBot) {
+        this.telegramBot = telegramBot;
+        initCommandMenu();
+    }
+
+    public Command retrieveCommand(String commandName) {
+        return commandsByName.get(commandName);
     }
 
     private void initCommandMenu() {

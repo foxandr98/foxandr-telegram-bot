@@ -67,8 +67,8 @@ public class UpdateController {
                 log.info("Invalid args count of {} command in [{}] from [@{}]. {}",
                         command, ChatUtils.getGroupChatOrUserName(message.getChat()), message.getFrom().getUserName(),
                         e.getMessage());
-                telegramBot.execute(MessageUtils.createSendMessageWithText(message,
-                        String.format("Неправильное число аргументов для команды %s", command)));
+                telegramBot.execute(MessageUtils.createSendMessageWithText(message, String.format("Неправильное " +
+                        "число аргументов для команды %1$s. Воспользуйтесь <code>/help %1$s</code>", command)));
             }
         } catch (TelegramApiException e) {
             log.error("Failed to send message in [{}] to [@{}]",
