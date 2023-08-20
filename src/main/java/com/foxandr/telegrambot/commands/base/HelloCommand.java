@@ -28,7 +28,7 @@ public class HelloCommand implements Command {
 
     @Override
     public int getHelpOrderPriority() {
-        return 2;
+        return 3;
     }
 
     @Override

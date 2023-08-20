@@ -35,5 +35,6 @@ build/
 ### Properties with credentials ###
 application.properties
 
-### Logs ###
+### Logs and images ###
 /logs
+/images

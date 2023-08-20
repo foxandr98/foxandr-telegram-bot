@@ -60,7 +60,7 @@ public class HelpCommand implements Command {
 
     @Override
     public int getHelpOrderPriority() {
-        return 3;
+        return 1;
     }
 
     //TODO Продумать, нужно ли реализовывать команды с аргументами внутри одного сообщения, или же отдельным сообщением

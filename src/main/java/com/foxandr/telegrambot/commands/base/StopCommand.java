@@ -29,6 +29,6 @@ public class StopCommand implements Command {
 
     @Override
     public int getHelpOrderPriority() {
-        return 1;
+        return 2;
     }
 }
