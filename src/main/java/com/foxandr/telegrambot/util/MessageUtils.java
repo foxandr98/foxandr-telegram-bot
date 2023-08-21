@@ -5,7 +5,6 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 
 import java.io.File;
 
@@ -22,7 +21,7 @@ public class MessageUtils {
         return sendMessage;
     }
 
-    public static SendPhoto createPhotoMessage(Message message, File file){
+    public static SendPhoto createPhotoMessage(Message message, File file) {
         log.info("Sending photo in [{}] to [@{}] -> {}",
                 ChatUtils.getGroupChatOrUserName(message.getChat()), message.getFrom().getUserName(), file.getName());
         var sendPhoto = new SendPhoto();

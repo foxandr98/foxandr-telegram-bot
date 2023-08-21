@@ -19,9 +19,20 @@
 		<lombok.version>1.18.24</lombok.version>
 		<reflections.version>0.10.2</reflections.version>
 		<jsoup.version>1.16.1</jsoup.version>
+		<selenium.version>4.11.0</selenium.version>
 	</properties>
 
 	<dependencies>
+
+
+		<!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>${selenium.version}</version>
+		</dependency>
+
+
 		<!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
 		<dependency>
 			<groupId>org.jsoup</groupId>

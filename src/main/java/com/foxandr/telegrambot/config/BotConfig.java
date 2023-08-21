@@ -1,6 +1,9 @@
 package com.foxandr.telegrambot.config;
 
 import com.foxandr.telegrambot.bot.TelegramBot;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
@@ -14,5 +17,14 @@ public class BotConfig {
         var api = new TelegramBotsApi(DefaultBotSession.class);
         api.registerBot(telegramBot);
         return api;
+    }
+
+    @Bean
+    public WebDriver webDriver(){
+        ChromeOptions options = new ChromeOptions();
+//        options.addArguments("--headless");
+        options.addArguments("--window-size=1920,1080");
+        options.addArguments("--disable-popup-blocking");
+        return new ChromeDriver(options);
     }
 }

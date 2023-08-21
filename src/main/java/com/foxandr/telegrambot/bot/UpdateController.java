@@ -6,16 +6,12 @@ import com.foxandr.telegrambot.exceptions.InvalidArgsCountException;
 import com.foxandr.telegrambot.util.MessageUtils;
 import com.foxandr.telegrambot.util.ChatUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 @Component
 @Slf4j
@@ -70,13 +66,15 @@ public class UpdateController {
                 telegramBot.execute(MessageUtils.createSendMessageWithText(message, String.format("Неправильное " +
                         "число аргументов для команды %1$s. Воспользуйтесь <code>/help %1$s</code>", command)));
             } catch (IllegalArgumentException e) {
-                log.info("Invalid args {}", nArgs);
+                log.info("Invalid args {}", (Object) nArgs);
                 telegramBot.execute(MessageUtils.createSendMessageWithText(message, String.format("Некорректные " +
                         "аргументы для команды %1$s. Воспользуйтесь <code>/help %1$s</code>", command)));
             }
         } catch (TelegramApiException e) {
             log.error("Failed to send message in [{}] to [@{}]",
                     ChatUtils.getGroupChatOrUserName(message.getChat()), message.getFrom().getUserName(), e);
+        } catch (Exception e) {
+            log.error("Error ", e);
         }
     }
 
