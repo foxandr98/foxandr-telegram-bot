@@ -6,6 +6,7 @@ import com.foxandr.telegrambot.exceptions.ImageNotFoundException;
 import com.foxandr.telegrambot.util.MessageUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.pool2.ObjectPool;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -18,6 +19,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -25,12 +27,15 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.Random;
 import java.util.UUID;
 
 @Slf4j
 public class GetImageCommand implements Command {
+
+    @Autowired
+    ObjectPool<WebDriver> pool;
+
     @Override
     public String getName() {
         return "/image";
@@ -60,14 +65,17 @@ public class GetImageCommand implements Command {
     public void execute(TelegramBot telegramBot, Message message, String[] args) throws TelegramApiException {
         try {
             telegramBot.execute(MessageUtils.createPhotoMessage(message,
-                    getImageByWord(telegramBot.getWebDriver(), args, 100)));
+                    getImageByWord(pool.borrowObject(), args, 100)));
         } catch (ImageNotFoundException e) {
             log.info("Image by query [{}] not found", args[0]);
             telegramBot.execute(MessageUtils.createSendMessageWithText(message,
                     "Изображение по запросу: " + args[0] + " не найдено!"));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
+    @Autowired
     public File getImageByWord(WebDriver webDriver, String[] args, int maxRandom) throws ImageNotFoundException {
         String query = String.join(" ", args);
         String url = String.format("https://ru.pinterest.com/search/pins/?q=%s", query);

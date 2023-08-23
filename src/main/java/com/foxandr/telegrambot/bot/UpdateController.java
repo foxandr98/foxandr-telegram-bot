@@ -5,6 +5,7 @@ import com.foxandr.telegrambot.commands.CommandContainer;
 import com.foxandr.telegrambot.exceptions.InvalidArgsCountException;
 import com.foxandr.telegrambot.util.MessageUtils;
 import com.foxandr.telegrambot.util.ChatUtils;
+import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -12,27 +13,34 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.Arrays;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 @Component
 @Slf4j
 public class UpdateController {
     private TelegramBot telegramBot;
     private CommandContainer commandContainer;
+    private ExecutorService executorService;
 
     public void registerBot(TelegramBot telegramBot) {
         this.telegramBot = telegramBot;
         this.commandContainer = new CommandContainer(telegramBot);
+        this.executorService = Executors.newFixedThreadPool(3);
 
     }
 
     public void processUpdate(Update update) {
         if (update.hasMessage()) {
-            Message message = update.getMessage();
-            if (message.hasText()) {
-                processTextMessage(message);
-            } else if (message.hasVoice()) {
-                processVoiceMessage(message);
-            }
+            executorService.submit(() -> {
+                Message message = update.getMessage();
+                if (message.hasText()) {
+                    processTextMessage(message);
+                } else if (message.hasVoice()) {
+                    processVoiceMessage(message);
+                }
+            });
         }
     }
 
@@ -66,7 +74,7 @@ public class UpdateController {
                 telegramBot.execute(MessageUtils.createSendMessageWithText(message, String.format("Неправильное " +
                         "число аргументов для команды %1$s. Воспользуйтесь <code>/help %1$s</code>", command)));
             } catch (IllegalArgumentException e) {
-                log.info("Invalid args {}", (Object) nArgs);
+                log.info("Invalid args {} for {} command", args, command);
                 telegramBot.execute(MessageUtils.createSendMessageWithText(message, String.format("Некорректные " +
                         "аргументы для команды %1$s. Воспользуйтесь <code>/help %1$s</code>", command)));
             }
@@ -74,7 +82,7 @@ public class UpdateController {
             log.error("Failed to send message in [{}] to [@{}]",
                     ChatUtils.getGroupChatOrUserName(message.getChat()), message.getFrom().getUserName(), e);
         } catch (Exception e) {
-            log.error("Error ", e);
+            log.error("Unhandled error: ", e);
         }
     }
 
@@ -85,5 +93,10 @@ public class UpdateController {
 
     private void processVoiceMessage(Message message) {
         //TODO Реализация обработки голосовых сообщений
+    }
+
+    @PreDestroy
+    private void clearResources() {
+        executorService.shutdown();
     }
 }

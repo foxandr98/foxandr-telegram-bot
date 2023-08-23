@@ -16,26 +16,19 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public class TelegramBot extends TelegramLongPollingBot {
     //    private static final Logger log = LoggerFactory.getLogger(TelegramBot.class);
     private final UpdateController updateController;
-    private final WebDriver webDriver;
+
     @Value("${bot.name}")
     String botName;
 
     @Autowired
-    public TelegramBot(@Value("${bot.token}") String botToken, UpdateController updateController, WebDriver webDriver) {
+    public TelegramBot(@Value("${bot.token}") String botToken, UpdateController updateController) {
         super(botToken);
         this.updateController = updateController;
-        this.webDriver = webDriver;
-
     }
 
     @PostConstruct
     public void init() {
         updateController.registerBot(this);
-    }
-
-    @PreDestroy
-    public void closeResources() {
-        webDriver.quit();
     }
 
     @Override
@@ -46,9 +39,5 @@ public class TelegramBot extends TelegramLongPollingBot {
     @Override
     public String getBotUsername() {
         return botName;
-    }
-
-    public WebDriver getWebDriver() {
-        return webDriver;
     }
 }
