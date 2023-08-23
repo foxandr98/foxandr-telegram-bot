@@ -20,9 +20,17 @@
 		<reflections.version>0.10.2</reflections.version>
 		<jsoup.version>1.16.1</jsoup.version>
 		<selenium.version>4.11.0</selenium.version>
+		<commons-pool2.version>2.11.1</commons-pool2.version>
 	</properties>
 
 	<dependencies>
+
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-pool2 -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-pool2</artifactId>
+			<version>${commons-pool2.version}</version>
+		</dependency>
 
 
 		<!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->

@@ -18,13 +18,4 @@ public class BotConfig {
         api.registerBot(telegramBot);
         return api;
     }
-
-    @Bean
-    public WebDriver webDriver(){
-        ChromeOptions options = new ChromeOptions();
-//        options.addArguments("--headless");
-        options.addArguments("--window-size=1920,1080");
-        options.addArguments("--disable-popup-blocking");
-        return new ChromeDriver(options);
-    }
 }
