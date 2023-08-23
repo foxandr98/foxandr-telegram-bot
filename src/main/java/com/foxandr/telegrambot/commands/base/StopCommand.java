@@ -3,13 +3,15 @@ package com.foxandr.telegrambot.commands.base;
 import com.foxandr.telegrambot.bot.TelegramBot;
 import com.foxandr.telegrambot.commands.Command;
 import com.foxandr.telegrambot.util.MessageUtils;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
 
 public class StopCommand implements Command {
     @Override
     public String getName() {
-        return "/stop";
+        return "stop";
     }
 
     @Override
@@ -19,7 +21,7 @@ public class StopCommand implements Command {
 
     @Override
     public String[] getUsage() {
-        return new String[]{"/stop"};
+        return new String[]{"stop"};
     }
 
     @Override

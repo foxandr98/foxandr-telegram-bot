@@ -3,13 +3,15 @@ package com.foxandr.telegrambot.commands.base;
 import com.foxandr.telegrambot.bot.TelegramBot;
 import com.foxandr.telegrambot.commands.Command;
 import com.foxandr.telegrambot.util.MessageUtils;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+@Component
 public class HelloCommand implements Command {
     @Override
     public String getName() {
-        return "/hello";
+        return "hello";
     }
 
     @Override
@@ -18,12 +20,12 @@ public class HelloCommand implements Command {
     }
     @Override
     public String[] getUsage() {
-        return new String[] {"/hello"};
+        return new String[] {"hello"};
     }
 
     @Override
     public String[] getAliases() {
-        return new String[]{"/hi", "/ку"};
+        return new String[]{"hi", "ку"};
     }
 
     @Override

@@ -17,8 +17,9 @@ import org.springframework.context.annotation.Scope;
 
 import java.time.Duration;
 
-@Configuration
+
 @Slf4j
+@Configuration
 public class WebDriverFactory extends BasePooledObjectFactory<WebDriver> {
 
     @Bean
@@ -27,7 +28,7 @@ public class WebDriverFactory extends BasePooledObjectFactory<WebDriver> {
     public WebDriver create() throws Exception {
 
         ChromeOptions options = new ChromeOptions();
-//        options.addArguments("--headless");
+        options.addArguments("--headless");
         options.addArguments("--window-size=1920,1080");
         options.addArguments("--disable-popup-blocking");
         return new ChromeDriver(options);

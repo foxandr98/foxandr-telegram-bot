@@ -5,16 +5,18 @@ import com.foxandr.telegrambot.commands.Command;
 import com.foxandr.telegrambot.enums.Emojis;
 import com.foxandr.telegrambot.util.MessageUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.Random;
 
 @Slf4j
+@Component
 public class RollCommand implements Command {
     @Override
     public String getName() {
-        return "/roll";
+        return "roll";
     }
 
     @Override
@@ -24,12 +26,17 @@ public class RollCommand implements Command {
 
     @Override
     public String[] getUsage() {
-        return new String[]{"/roll", "/roll [max]", "/roll [min] [max]"};
+        return new String[]{"roll", "roll [max]", "roll [min] [max]"};
+    }
+
+    @Override
+    public String[] getExamples() {
+        return new String[]{"roll", "roll 6", "roll 1 20"};
     }
 
     @Override
     public String[] getAliases() {
-        return new String[]{"/dice"};
+        return new String[]{"dice"};
     }
 
     @Override

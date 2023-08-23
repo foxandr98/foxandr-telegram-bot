@@ -7,6 +7,7 @@ import com.foxandr.telegrambot.util.MessageUtils;
 import com.foxandr.telegrambot.util.ChatUtils;
 import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -15,18 +16,17 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 
 @Component
 @Slf4j
 public class UpdateController {
     private TelegramBot telegramBot;
+    @Autowired
     private CommandContainer commandContainer;
     private ExecutorService executorService;
 
-    public void registerBot(TelegramBot telegramBot) {
+    public void initUpdateController(TelegramBot telegramBot) {
         this.telegramBot = telegramBot;
-        this.commandContainer = new CommandContainer(telegramBot);
         this.executorService = Executors.newFixedThreadPool(3);
 
     }
@@ -46,12 +46,12 @@ public class UpdateController {
 
     private void processTextMessage(Message message) {
         String messageText = message.getText();
-        if (ChatUtils.isGroupChat(message.getChat())
-                && !messageText.matches("^(/\\w+@foxandr_bot\\b).*"))
+        if (!messageText.matches("^(/.*)") ||
+                (ChatUtils.isGroupChat(message.getChat()) && !messageText.matches("^(/\\w+@foxandr_bot\\b).*")))
             return;
 
         String[] args = messageText.split(" ");
-        String command = args[0].split("@")[0].toLowerCase();
+        String command = args[0].split("@")[0].toLowerCase().substring(1);
         String[] nArgs = Arrays.copyOfRange(args, 1, args.length);
 
         log.info("[{}] [{}] -> {}", ChatUtils.getGroupChatOrUserName(message.getChat()),
@@ -63,20 +63,20 @@ public class UpdateController {
                 isArgsLegit(parsedCommand, nArgs);
                 parsedCommand.execute(telegramBot, message, nArgs);
             } catch (NullPointerException e) {
-                log.info("Unsupported command {} in [{}] from [@{}]",
+                log.info("Unsupported command /{} in [{}] from [@{}]",
                         command, ChatUtils.getGroupChatOrUserName(message.getChat()), message.getFrom().getUserName());
                 telegramBot.execute(MessageUtils.createSendMessageWithText(message,
-                        String.format("Команда %s не существует!", command)));
+                        String.format("Команда /%s не существует!", command)));
             } catch (InvalidArgsCountException e) {
-                log.info("Invalid args count of {} command in [{}] from [@{}]. {}",
+                log.info("Invalid args count of /{} command in [{}] from [@{}]. {}",
                         command, ChatUtils.getGroupChatOrUserName(message.getChat()), message.getFrom().getUserName(),
                         e.getMessage());
                 telegramBot.execute(MessageUtils.createSendMessageWithText(message, String.format("Неправильное " +
-                        "число аргументов для команды %1$s. Воспользуйтесь <code>/help %1$s</code>", command)));
+                        "число аргументов для команды /%1$s. Воспользуйтесь <code>/help %1$s</code>", command)));
             } catch (IllegalArgumentException e) {
-                log.info("Invalid args {} for {} command", args, command);
+                log.info("Invalid args {} for /{} command", args, command);
                 telegramBot.execute(MessageUtils.createSendMessageWithText(message, String.format("Некорректные " +
-                        "аргументы для команды %1$s. Воспользуйтесь <code>/help %1$s</code>", command)));
+                        "аргументы для команды /%1$s. Воспользуйтесь <code>/help %1$s</code>", command)));
             }
         } catch (TelegramApiException e) {
             log.error("Failed to send message in [{}] to [@{}]",

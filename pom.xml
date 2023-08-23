@@ -10,14 +10,13 @@
 	</parent>
 	<groupId>com.foxandr</groupId>
 	<artifactId>foxandr-telegram-bot</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.2</version>
 	<name>Foxandr Telegram Bot</name>
 	<description>Telegram bot with useful features</description>
 	<properties>
 		<java.version>20</java.version>
 		<telegram.version>6.7.0</telegram.version>
 		<lombok.version>1.18.24</lombok.version>
-		<reflections.version>0.10.2</reflections.version>
 		<jsoup.version>1.16.1</jsoup.version>
 		<selenium.version>4.11.0</selenium.version>
 		<commons-pool2.version>2.11.1</commons-pool2.version>
@@ -47,15 +46,6 @@
 			<artifactId>jsoup</artifactId>
 			<version>${jsoup.version}</version>
 		</dependency>
-
-
-		<!-- https://mvnrepository.com/artifact/org.reflections/reflections -->
-		<dependency>
-			<groupId>org.reflections</groupId>
-			<artifactId>reflections</artifactId>
-			<version>${reflections.version}</version>
-		</dependency>
-
 
 		<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
 		<dependency>

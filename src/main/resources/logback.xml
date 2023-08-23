@@ -28,11 +28,10 @@
     <!-- Пользовательские логгеры. Можно привязывать к определенным пакетам -->
     <logger name="com.foxandr.telegrambot" level="debug" additivity="false">
         <appender-ref ref="STDOUT" />
-        <appender-ref ref="FILE" />
     </logger>
 
     <!-- Корневой логгер. Обрабатывает все уровни вложенности библиотек, где прописаны логгеры -->
     <root level="debug">
-
+        <appender-ref ref="FILE" />
     </root>
 </configuration>

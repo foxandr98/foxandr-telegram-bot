@@ -9,6 +9,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -18,16 +19,16 @@ import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 @Slf4j
+@Component
 public class ReasonToDrinkCommand implements Command {
     private List<String> cachedCelebrations;
     private LocalDate cachedDate;
 
     @Override
     public String getName() {
-        return "/reason_to_drink";
+        return "reason_to_drink";
     }
 
     @Override
@@ -37,7 +38,7 @@ public class ReasonToDrinkCommand implements Command {
 
     @Override
     public String[] getUsage() {
-        return new String[]{"/reason_to_drink"};
+        return new String[]{"reason_to_drink"};
     }
 
     @Override

@@ -8,6 +8,9 @@ public interface Command {
     String getName();
     String getDescription();
     String[] getUsage();
+    default String[] getExamples() {
+        return getUsage();
+    }
     default String[] getAliases() {
         return new String[0];
     }
